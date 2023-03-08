@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="section" [formGroup]="form">
+    <input class="input is-rounded is-dark"
+      type="text"
+      formControlName="search"
+      placeholder="Search..."
+    />
+    <hr/>
+    <button class="button is-fullwidth is-rounded is-success">
+      Random Cocktail!
+    </button>
+  </div>
+  <div class="section">
+    <app-cocktail-list [searchForm]="form"/>
+  </div>
+</div>

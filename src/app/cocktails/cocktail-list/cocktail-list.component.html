@@ -1,0 +1,21 @@
+<table
+  class="table is-striped is-narrow is-hoverable is-fullwidth"
+  *ngIf="!isLoading"
+>
+  <thead>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Alcohol</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cocktail of cocktails">
+      <td>{{ cocktail.strDrink }}</td>
+      <td>{{ cocktail.strCategory }}</td>
+      <td><app-alcoholic-renderer [alcoholType]="cocktail.strAlcoholic"/></td>
+    </tr>
+  </tbody>
+</table>
+<progress *ngIf="isLoading"
+  class="progress is-large is-success"
+  max="100">
+</progress>
