@@ -1,21 +1,30 @@
-<table
-  class="table is-striped is-narrow is-hoverable is-fullwidth"
-  *ngIf="!isLoading"
->
-  <thead>
-    <th>Name</th>
-    <th>Category</th>
-    <th>Alcohol</th>
-  </thead>
-  <tbody>
-    <tr *ngFor="let cocktail of cocktails">
-      <td>{{ cocktail.strDrink }}</td>
-      <td>{{ cocktail.strCategory }}</td>
-      <td><app-alcoholic-renderer [alcoholType]="cocktail.strAlcoholic"/></td>
-    </tr>
-  </tbody>
-</table>
-<progress *ngIf="isLoading"
-  class="progress is-large is-success"
+<ng-container *ngIf="cocktails$ | async as cocktails">
+  <nz-table
+    #table
+    [nzData]="cocktails"
+    *ngIf="!(isLoading$ | async)"
+  >
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Alcohol</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cocktail of table.data">
+        <td>
+          <a [routerLink]="['cocktails', cocktail.idDrink]">{{ cocktail.strDrink }}</a>
+        </td>
+        <td>{{ cocktail.strCategory }}</td>
+        <td>
+          <app-alcoholic-renderer [alcoholType]="cocktail.strAlcoholic"/>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-container>
+<progress *ngIf="(isLoading$ | async)"
+  class="progress is-large is-link"
   max="100">
 </progress>

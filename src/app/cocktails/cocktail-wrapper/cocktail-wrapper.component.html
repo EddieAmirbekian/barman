@@ -1,12 +1,15 @@
 <div class="container">
   <div class="section" [formGroup]="form">
-    <input class="input is-rounded is-dark"
-      type="text"
-      formControlName="search"
-      placeholder="Search..."
-    />
+    <nz-input-group nzSize="large" [nzSuffix]="suffixIconSearch">
+      <input type="text" nz-input placeholder="Search" formControlName="search"/>
+    </nz-input-group>
     <hr/>
-    <button class="button is-fullwidth is-rounded is-success">
+    <button nz-button
+      nzSize="large"
+      nzType="primary"
+      [style.width]="'100%'"
+      (click)="onRandom()"
+    >
       Random Cocktail!
     </button>
   </div>
@@ -14,3 +17,8 @@
     <app-cocktail-list [searchForm]="form"/>
   </div>
 </div>
+
+
+<ng-template #suffixIconSearch>
+  <span nz-icon nzType="search"></span>
+</ng-template>

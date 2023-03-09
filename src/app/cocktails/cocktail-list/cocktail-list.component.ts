@@ -1,8 +1,9 @@
-import { Drink } from './../../types';
-import { CocktailsService } from './../../services/cocktails.service';
+import { selectCocktails, isLoading } from './../../store/selectors';
+import { apiActions, appActions } from './../../store/actions';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, startWith, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-cocktail-list',
@@ -12,29 +13,21 @@ import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs';
 export class CocktailListComponent implements OnInit {
   @Input() searchForm!: FormGroup;
 
-  private readonly service = inject(CocktailsService);
+  private readonly store = inject(Store);
 
-  cocktails: Drink[] = [];
-  isLoading = false;
+  cocktails$ = this.store.select(selectCocktails);
+  isLoading$ = this.store.select(isLoading);
 
   ngOnInit() {
-    this.isLoading = true;
-    this.service.getCocktailsByName('').subscribe((drinks) => {
-      this.cocktails = drinks;
-      this.isLoading = false;
-    });
-
-    this.searchForm.valueChanges
+    this.searchForm.get('search')!.valueChanges
       .pipe(
-        tap(() => (this.isLoading = true)),
-        map((r) => r.search),
+        startWith(''),
         debounceTime(500),
-        distinctUntilChanged(),
-        switchMap((search) => this.service.getCocktailsByName(search))
+        distinctUntilChanged()
       )
-      .subscribe((drinks) => {
-        this.cocktails = drinks;
-        this.isLoading = false;
+      .subscribe((search) => {
+        this.store.dispatch(appActions.isLoading({isLoading: true}));
+        this.store.dispatch(apiActions.searchByName({name: search}));
       });
   }
 }

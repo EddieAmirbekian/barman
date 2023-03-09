@@ -1,0 +1,29 @@
+<div class="container">
+  <div *ngIf="cocktail$ | async as cocktail" [style.width]="'400px'">
+    <nz-card
+      nzHoverable
+      [nzTitle]="cocktail.strDrink"
+      [nzCover]="coverTemplate"
+      [nzExtra]="extraTemplate"
+    >
+      <p>
+        <b>Instructions: </b>
+        {{ cocktail.strInstructions }}
+      </p>
+      <p>
+        <b>Type of glass: </b>
+        {{ cocktail.strGlass }}
+      </p>
+      <p>
+        <b>Ingredients: </b>
+        {{ getIngredients(cocktail) }}
+      </p>
+    </nz-card>
+    <ng-template #coverTemplate>
+      <img [src]="cocktail.strDrinkThumb" [alt]="cocktail.strDrink" />
+    </ng-template>
+    <ng-template #extraTemplate>
+      <a [routerLink]="['../..']">Back</a>
+    </ng-template>
+  </div>
+</div>
